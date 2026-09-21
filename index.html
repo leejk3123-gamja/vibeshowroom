@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>바이브 벤처 학생 작품 전시관</title>
+  <meta name="description" content="학생들이 매달 만든 앱을 관람하고 방명록을 남기는 웹 전시관">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@600;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ───────── 입구 ───────── -->
+<header class="hero" id="hero">
+  <div class="hero-light" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <span class="demo-badge" id="demo-badge" hidden>DEMO · js/config.js 의 API_URL 을 채우면 실제 데이터로 전환됩니다</span>
+    <p class="hero-sub" id="hero-sub"></p>
+    <h1 id="hero-title"></h1>
+    <p class="hero-tag" id="hero-tag"></p>
+
+    <div class="hero-stats">
+      <div class="stat"><b data-stat="rooms">0</b><span>전시실</span></div>
+      <div class="stat"><b data-stat="projects">0</b><span>전시 작품</span></div>
+      <div class="stat"><b data-stat="comments">0</b><span>방명록</span></div>
+      <div class="stat"><b data-stat="claps">0</b><span>응원 박수</span></div>
+    </div>
+
+    <div class="hero-actions">
+      <button class="btn gold" id="btn-random">🎲 랜덤 관람</button>
+      <button class="btn ghost" id="btn-slideshow">▶ 슬라이드쇼</button>
+    </div>
+  </div>
+
+  <div class="ticker" id="ticker" aria-label="최근 방명록">
+    <span class="ticker-label">최근 방명록</span>
+    <div class="ticker-clip"><div class="ticker-track" id="ticker-track"></div></div>
+  </div>
+</header>
+
+<!-- ───────── 전시실 선택 ───────── -->
+<nav class="roombar" id="roombar">
+  <div class="rooms" id="rooms"></div>
+  <div class="tools">
+    <label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="작품·개발자·학교 검색"></label>
+    <select id="sort" aria-label="정렬">
+      <option value="no">번호순</option>
+      <option value="comments">방명록 많은 순</option>
+      <option value="claps">박수 많은 순</option>
+      <option value="name">이름순</option>
+      <option value="random">무작위</option>
+    </select>
+  </div>
+</nav>
+
+<!-- ───────── 전시실 ───────── -->
+<main class="wrap">
+  <div class="loading" id="loading">전시실 문을 여는 중…</div>
+  <div class="room-head" id="room-head"></div>
+  <section class="grid" id="grid" aria-live="polite"></section>
+  <p class="empty" id="empty" hidden></p>
+</main>
+
+<footer class="foot">
+  <span id="foot-text">바이브 벤처 · 내가 만든 앱 자랑하기</span>
+  <span class="foot-keys">키보드: ← → 이전/다음 · Esc 닫기</span>
+</footer>
+
+<!-- ───────── 관람 화면 ───────── -->
+<div class="viewer" id="viewer" hidden role="dialog" aria-modal="true">
+  <div class="v-top">
+    <button class="btn ghost sm" id="v-close">‹ 전시실로</button>
+    <div class="v-nav">
+      <button class="icon" id="v-prev" aria-label="이전 작품">‹</button>
+      <span id="v-pos"></span>
+      <button class="icon" id="v-next" aria-label="다음 작품">›</button>
+    </div>
+    <div class="v-actions">
+      <button class="btn ghost sm" id="v-copy">🔗 링크 복사</button>
+      <a class="btn gold sm" id="v-open" href="#" target="_blank" rel="noopener noreferrer">새 창에서 열기 ↗</a>
+    </div>
+  </div>
+
+  <div class="v-body">
+    <div class="v-stage">
+      <div class="v-frame">
+        <iframe id="v-iframe" src="about:blank" title="작품 미리보기" allow="fullscreen"></iframe>
+        <div class="v-spinner" id="v-spinner" hidden></div>
+        <div class="v-fallback" id="v-fallback" hidden>
+          <img id="v-fallback-img" alt="">
+          <div class="v-fallback-msg">
+            <p>이 작품은 보안 설정으로 전시관 안에서 직접 실행되지 않습니다.</p>
+            <a class="btn gold" id="v-fallback-link" href="#" target="_blank" rel="noopener noreferrer">작품 사이트 바로가기 ↗</a>
+          </div>
+        </div>
+      </div>
+      <p class="v-hint">화면이 비어 있거나 로그인 창이 뜨면 <b>새 창에서 열기</b>를 눌러 주세요.</p>
+    </div>
+
+    <aside class="v-panel">
+      <div class="v-tabs">
+        <button data-tab="about" class="on">작품 소개</button>
+        <button data-tab="guest">방명록 <span class="cnt" id="v-gcount">0</span></button>
+      </div>
+
+      <section class="v-tab on" id="tab-about">
+        <div class="plate big">
+          <div class="plate-top"><span id="v-room"></span><span id="v-no"></span></div>
+          <h2 id="v-title"></h2>
+          <p id="v-desc"></p>
+          <dl class="meta" id="v-meta"></dl>
+        </div>
+        <button class="clap big" id="v-clap">👏 <b id="v-clapcount">0</b> <span>응원 박수 보내기</span></button>
+        <p class="tiny">박수는 한 사람당 작품마다 최대 5번까지 보낼 수 있어요.</p>
+      </section>
+
+      <section class="v-tab" id="tab-guest">
+        <p class="notice" id="v-notice"></p>
+        <form class="g-form" id="g-form" autocomplete="off">
+          <div class="row2">
+            <label>이름 <input id="g-name" maxlength="30" placeholder="이름" required></label>
+            <label>소속 <input id="g-school" maxlength="40" placeholder="예: 대구OO중학교"></label>
+          </div>
+          <label>내용 <textarea id="g-content" maxlength="500" rows="3" placeholder="작품에 대한 응원이나 소감을 남겨 주세요!" required></textarea></label>
+          <input id="g-website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="btn gold" id="g-submit" type="submit">방명록 남기기</button>
+        </form>
+        <ul class="g-list" id="g-list"></ul>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<!-- ───────── 슬라이드쇼 ───────── -->
+<div class="slideshow" id="slideshow" hidden role="dialog" aria-modal="true">
+  <div class="ss-progress"><i id="ss-bar"></i></div>
+  <div class="ss-stage" id="ss-stage"><span class="ss-initial" id="ss-initial"></span></div>
+  <div class="ss-caption">
+    <span class="ss-room" id="ss-room"></span>
+    <h2 id="ss-title"></h2>
+    <p id="ss-desc"></p>
+    <span class="ss-who" id="ss-who"></span>
+  </div>
+  <button class="icon ss-close" id="ss-close" aria-label="닫기">✕</button>
+  <button class="icon ss-pause" id="ss-pause" aria-label="일시정지">❚❚</button>
+  <button class="icon ss-prev" id="ss-prev" aria-label="이전">‹</button>
+  <button class="icon ss-next" id="ss-next" aria-label="다음">›</button>
+  <p class="ss-help">← → 이동 · 스페이스 일시정지 · Enter 관람 · Esc 종료</p>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "vibe-venture-gallery",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "shots": "node scripts/screenshot.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.47.0"
+  }
+}
