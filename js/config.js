@@ -8,7 +8,7 @@ window.GALLERY_CONFIG = {
   // API_URL: 'https://script.google.com/macros/s/AKfycbze-OY6CZdJ-CRhTQj9UdjGOicjJxWqSsekXKvkQEqa1o9UH3rfMR3ZIGemizBIDs1N/exec',
    
   // 2) 문구
-  TITLE: '바이브 벤처 학생 작품 전시관',
+  TITLE: 'Vibe Venture Student Showroom',
   SUBTITLE: 'INNODG / VIBE-VENTURE',
   TAGLINE: '학생들이 한 달 동안 만든 앱을 한 곳에서 관람하고, 응원의 방명록을 남겨 주세요.',
   NOTICE: '우리 학생들이 한 달간 열심히 달려온 결과물입니다! 아직은 서툴고 수정할 곳이 많지만, 학생들의 노력에 아낌없는 격려와 응원을 보내 주세요.',
