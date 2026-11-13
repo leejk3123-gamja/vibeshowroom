@@ -4,8 +4,9 @@
    ============================================================ */
 window.GALLERY_CONFIG = {
   // 1) Apps Script 웹 앱 URL (…/exec 로 끝나는 주소). 비워두면 DEMO 모드로 동작합니다.
-  API_URL: 'https://script.google.com/macros/s/AKfycbze-OY6CZdJ-CRhTQj9UdjGOicjJxWqSsekXKvkQEqa1o9UH3rfMR3ZIGemizBIDs1N/exec',
-
+  API_URL: '',
+  // API_URL: 'https://script.google.com/macros/s/AKfycbze-OY6CZdJ-CRhTQj9UdjGOicjJxWqSsekXKvkQEqa1o9UH3rfMR3ZIGemizBIDs1N/exec',
+   
   // 2) 문구
   TITLE: '바이브 벤처 학생 작품 전시관',
   SUBTITLE: 'INNODG / VIBE-VENTURE',
